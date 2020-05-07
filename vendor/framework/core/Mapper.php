@@ -12,5 +12,5 @@ abstract class Mapper
 	}
 	
 	abstract public function save($obj);
-	abstract public function delete($obj);
+	abstract public function deleteObject($obj);
 }

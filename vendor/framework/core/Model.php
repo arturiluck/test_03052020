@@ -4,12 +4,17 @@ namespace Framework;
 
 abstract class Model implements Interfaces\Model
 {
+	const NOT_VALID = 'notvalid';
+	const EXIST = 'exist';
+	
 	public $id;
 
-	public function __construct($data)
+	public function __construct($data = null)
 	{
 		foreach ($this as $key => &$value) {
-			$value=$data[$key];
+			if(isset($data[$key])){
+				$value = $data[$key];
+			}
 		}
 	}
 

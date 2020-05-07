@@ -6,7 +6,7 @@
       <!---->
 	  <div class="col-sm-12" ng-repeat="x in showAll">
 		  <div class="panel panel-primary">
-			<div class="panel-heading"><button class="btn btn-primary btn-danger" data-toggle="modal" data-target="#editPerson" ng-click="beforeEditPerson(x)" ng-disabled="false" >Edit</button></div>
+			<div class="panel-heading"><button class="btn btn-primary btn-danger" data-toggle="modal" data-target="#editPerson" ng-click="beforeEditPerson(x)" ng-disabled="false" >Edit1</button></div>
 			<div class="panel-body">
 				<table class="table table-striped">
 					  <tr>
@@ -40,9 +40,6 @@
   			<div class="">
 				<h2>Login form</h2>
 				<div class="panel panel-default">
-				
-		
-				
 					<div class="panel-body">
 						<form>
 							<div class="form-group {{erorr.login.erorrClass}}">
@@ -154,20 +151,18 @@ app.controller('formCtrl', function($scope, $http, $interval) {
 	$scope.showAll=[{'name':'name'}];
 	$scope.user={};
 	$scope.editUser={};
-	$scope.user.token=$scope.editUser.token='<?php echo $token; ?>';
+	//$scope.user.token=$scope.editUser.token='<?php echo $token; ?>';
 
 	$scope.registerPersons = function() {
-		//console.log($scope.user);
+		console.log($scope.user);
 	    $http({
-	       method : "POST",
-	       url : "/site/registration",
-		   headers: {
-						'Content-Type': 'application/x-www-form-urlencoded',
-						'Token': '<?php echo $token; ?>'
-					},
-		   data: $.param($scope.user)
+	       method : "PUT",
+	       url : "/api/user/create",
+		   headers: {'Content-Type': 'application/json'},
+		   data: $scope.user
 	     }).then(function mySucces(response) {
-			 console.log(response.data);
+			 console.log(response);
+			 alert();
 			 $scope.erorr={};
 			 if (Object.keys(response.data.data).length>0){
 				 for (var key in response.data.data){
@@ -178,7 +173,8 @@ app.controller('formCtrl', function($scope, $http, $interval) {
 			 }		 
 			 
 	       }, function myError(response) {
-			 console.log(response.data);
+			   alert('dsadada!!!!_______SEQWE');
+			 console.log(response);
 	     });
 	}
 	$scope.checkErorrs= function(obj,key,value){
@@ -205,8 +201,8 @@ app.controller('formCtrl', function($scope, $http, $interval) {
 		 $http({
 	       method : "POST",
 	       url : "/site/edit",
-		   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-		   data: $.param($scope.editUser)
+		   headers: {'Content-Type': 'application/json'},
+		   data: $scope.editUser//$.param($scope.editUser)
 	     }).then(function mySucces(response) {	 
 			 console.log(response.data);
 			 $scope.erorr={};
@@ -220,7 +216,7 @@ app.controller('formCtrl', function($scope, $http, $interval) {
 	       }, function myError(response) {
 			 console.log(response.data);
 	     });
-	}
+	}/*
 	$scope.callTimeUpdate=function(){
 		 $http({
 	       method : "POST",
@@ -236,6 +232,6 @@ app.controller('formCtrl', function($scope, $http, $interval) {
 	}
 	$scope.callTimeUpdate();
 	$interval( function(){ $scope.callTimeUpdate(); }, 3000);
-
+*/
 });
 </script>

@@ -3,73 +3,123 @@
 namespace App\Mapper;
 
 use \Framework\Mapper;
+use \App\Model\User;
+use \Framework\Exception\ApiException;
 
 class UserMapper extends Mapper{
-/*
- 	public function getById($id){
- 		$sql = "SELECT * FROM persons WHERE id =:id;";
-        $statement = $this->db->prepare($sql);
-        $statement->bindParam("id", $id);
-        $statement->execute();
- 		$statement->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\module\app\model\Persons');
- 		return $statement->fetch();
- 	}
-    public function findByEmail($email){
-		$sql = "SELECT * FROM persons WHERE email LIKE :email;";
-        $statement = $this->db->prepare($sql);
-        $statement->bindParam("email", $email);
-        $statement->execute();
- 		$statement->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\module\app\model\Persons');
- 		return $statement->fetch();
-    }
-    public function findByLogin($login){
-		$sql = "SELECT * FROM persons WHERE login LIKE :login;";
-        $statement = $this->db->prepare($sql);
-        $statement->bindParam("login", $login);
-        $statement->execute();
- 		$statement->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\module\app\model\Persons');
- 		return $statement->fetch();
-    }
-    public function showAll(){
-		$sql = "SELECT * FROM persons ORDER BY id desc LIMIT 10;";
-        $statement = $this->db->prepare($sql);
-        $statement->bindParam("login", $login);
-        $statement->execute();
- 		$statement->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\module\app\model\Persons');
- 		return $statement->fetchAll();
-    }
 
+	public function findById($id)
+	{
+		try{
+			$sql = "SELECT * FROM users WHERE id = :id;";
+			$statement = $this->connection->prepare($sql);
+			$statement->bindParam("id", $id);
+			$statement->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\App\Model\User');
 
-    public function save($obj){
-    	try{
-	    	if ($obj->id) {
-	          	$sql = "UPDATE persons SET login=:login, name=:name, lastname=:lastname, email=:email, password=:password WHERE id = :id;";
-	            $statement = $this->db->prepare($sql);
-	            $statement->bindParam("id", $obj->id);
-	            $statement->bindParam("login", $obj->login);
-	            $statement->bindParam("name", $obj->name);
-	            $statement->bindParam("lastname", $obj->lastname);
-	            $statement->bindParam("email", $obj->email);
-	            $statement->bindParam("password", $obj->password);
-	            $statement->execute();
-	        }
-	        else {
-	            $sql = "INSERT INTO persons (login, name, lastname, email, password) VALUES (:login, :name, :lastname, :email, :password);";
-	            $statement = $this->db->prepare($sql);
-	            $statement->bindParam("login", $obj->login);
-	            $statement->bindParam("name", $obj->name);
-	            $statement->bindParam("lastname", $obj->lastname);
-	            $statement->bindParam("email", $obj->email);
-	            $statement->bindParam("password", $obj->password);
-	            $statement->execute();
-	            $obj->id = $this->db->lastInsertId();
-	        }	
-		}catch(PDOException $e){
-			return false;
-		}	
-		return true;
-    }
-    public function delete($obj){
+			$statement->execute();
+		}catch(\PDOException $e){
+
+			throw new ApiException('Database failure: '.$e->getMessage(), 500);
+		}
+
+		return $statement->fetch();
 	}
-	*/
+
+	public function findByEmail($email)
+	{
+		try{
+			$sql = "SELECT * FROM users WHERE email = :email;";
+			$statement = $this->connection->prepare($sql);
+			$statement->bindParam("email", $email);
+			$statement->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\App\Model\User');
+
+			$statement->execute();
+		}catch(\PDOException $e){
+
+			throw new ApiException('Database failure: '.$e->getMessage(), 500);
+		}
+
+		return $statement->fetch();
+	}
+
+	public function findByPhone($phone)
+	{
+		$sql = "SELECT * FROM users WHERE phone = :phone;";
+		$statement = $this->connection->prepare($sql);
+		$statement->bindParam("phone", $phone);
+
+		$statement->execute();
+		$statement->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\App\Model\User');
+
+		return $statement->fetch();
+	}
+
+	public function findAll($limit = null)
+	{
+		$sql = "SELECT * FROM users ORDER BY id desc";
+		$sql .= is_null($limit)? ";" : " LIMIT :limit;";
+
+		$statement = $this->connection->prepare($sql);
+		$statement->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, '\App\Model\User');
+
+		if (!is_null($limit)){
+			$statement->bindParam("limit", $limit);
+		}
+
+		$statement->execute();
+
+		return $statement->fetchAll();
+	}
+
+
+	public function save($obj)
+	{
+		try{
+			if ($obj->id) {
+				$sql = "UPDATE users SET phone=:phone, firstname=:firstname, lastname=:lastname, email=:email WHERE id = :id;";
+				$statement = $this->connection->prepare($sql);
+
+				$statement->bindParam("id", $obj->id);
+				$statement->bindParam("phone", $obj->phone);
+				$statement->bindParam("firstname", $obj->firstname);
+				$statement->bindParam("lastname", $obj->lastname);
+				$statement->bindParam("email", $obj->email);
+
+				$statement->execute();
+			} else {
+				$sql = "INSERT INTO users (phone, firstname, lastname, email) VALUES (:phone, :firstname, :lastname, :email);";
+				$statement = $this->connection->prepare($sql);
+
+				$statement->bindParam("phone", $obj->phone);
+				$statement->bindParam("firstname", $obj->firstname);
+				$statement->bindParam("lastname", $obj->lastname);
+				$statement->bindParam("email", $obj->email);
+
+				$statement->execute();
+				
+				$obj->id = $this->connection->lastInsertId();
+			}
+		}catch(\PDOException $e){
+
+			throw new ApiException('Database failure: '.$e->getMessage(), 500);
+		}
+
+		return $obj;
+	}
+
+	public function deleteObject($id)
+	{
+		try{
+			$sql = "DELETE FROM users WHERE id = :id;";
+			$statement = $this->connection->prepare($sql);
+			$statement->bindParam("id", $id);
+
+			$statement->execute();
+		}catch(\PDOException $e){
+
+			throw new ApiException('Database failure: '.$e->getMessage(), 500);
+		}
+
+		return true;
+	}
 }

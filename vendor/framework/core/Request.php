@@ -4,7 +4,8 @@ namespace Framework;
 
 class Request implements Interfaces\Request
 {
-	private $request;
+	private $bodyRequest = [];
+	private $request = [];
 
 	private function prepareVariable($variable)
 	{
@@ -13,6 +14,9 @@ class Request implements Interfaces\Request
 
 	public function __construct($request)
 	{
+		$jsonRequest = file_get_contents("php://input");
+		$this->bodyRequest = json_decode($jsonRequest);
+
 		$this->request = $request;
 	}
 
@@ -21,34 +25,23 @@ class Request implements Interfaces\Request
 		if (is_null($name)){
 			$arrayPost = [];
 
-			foreach($this->request as $key => $value){
+			foreach($this->bodyRequest as $key => $value){
 				$arrayPost[$key] = $this->prepareVariable($value);
 			}
 
 			return $arrayPost;
 			/*
-			foreach($this->request as $key => $value){
+			foreach($this->bodyRequest as $key => $value){
 				yield $key => $this->prepareVariable($value);
 			}
 			*/
 		}
 
-		return $this->prepareVariable($this->request[$name]);
+		return $this->prepareVariable($this->bodyRequest->{$name});
 	}
 
 	public function getParameter($name)
 	{
 		return $this->prepareVariable($this->request[$name]);
-	}
-
-	public function isAjax()
-	{
-		if (isset($_SERVER['CONTENT_TYPE']) 
-			&& strtolower($_SERVER['CONTENT_TYPE']) == 'application/x-www-form-urlencoded') {
-
-			return true;
- 		}
-
-		return false;
 	}
 }

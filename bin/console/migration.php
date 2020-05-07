@@ -23,6 +23,6 @@ foreach($allMigrations as $migration) {
 		die("Exception : " . $e->getMessage());
 	}
 
-	echo "Migration($migration) has been complated.\n";	
+	echo "Migration($migration) has been complated.\n";
 } 
-echo "All migration have been complated.\n";	
+echo "All migration have been complated.\n";

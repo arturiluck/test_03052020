@@ -82,7 +82,8 @@ final class Router
 
 			$path = function($container) use ($controller, $action, $params)
 			{
-				return (new $controller($container))->{$action}($params);
+				$reflectionMethod = new \ReflectionMethod($controller, $action);
+				return $reflectionMethod->invokeArgs(new $controller($container), $params);
 			};
 
 			return $path;

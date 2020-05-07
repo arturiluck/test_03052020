@@ -22,7 +22,6 @@ class Authorization extends \Framework\Controller
 		$response = $this->container->get('response');
 		$request = $this->container->get('request');
 
-
 		$login = $request->getPost('login');
 		$password = $request->getPost('password');
 

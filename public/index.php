@@ -7,11 +7,11 @@ try {
 
 	Framework\Autoloader::setCustomNamespace($config['autoload']);
 	Framework\Autoloader::init();
+	Framework\DB::setOptions($config['db']);
 
 	$container = (new Framework\ContainerFactory($config))->getContainer();
 	Framework\Router::addRoute($config['routes']);
 	$controller = Framework\Router::dispatch();
-
 
 	echo $controller($container);
 } catch (Framework\Exception\ApiException $e) {

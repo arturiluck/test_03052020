@@ -4,97 +4,115 @@ namespace App\Controller\Api;
 
 use \Framework\Exception\ApiException;
 use \App\Model\User;
+use \App\Mapper\UserMapper;
+
 
 class UserController extends \Framework\Controller
 {
 	public function getUsers()
 	{
-		echo "getUsers";
+		$this->checkAuthorization();
+		$connection = $this->container->get('connection');
+		$response = $this->container->get('response');
+
+		$mapper = new UserMapper($connection);
+		$users = $mapper->findAll();
+
+		if(count($users) > 0){
+			return $response->response($users, 200);
+		}
+
+		return $response->response('', 404);
 	}
 
 	public function getUser($id)
 	{
 		$this->checkAuthorization();
-		$request = $this->container->get('request');
+		$connection = $this->container->get('connection');
+		$response = $this->container->get('response');
 
-		//$request->getPost()
-		//new User($this->getPost())
-		die("dsada");
+		$mapper = new UserMapper($connection);
+		$user = $mapper->findById($id);
 
-/*
-		$obj = new User($this->getPost());
-		
-		 $obj = new Persons ($this->getPost());
-			$errors = $obj->valid();
-            $mapper = new PersonsMapper();
+		if($user instanceof User){
+			return $response->response($user, 200);
+		}
 
-            if ($mapper->findByEmail($obj->email)) $errors->email="exist";
-            if ($mapper->findByLogin($obj->login)) $errors->login="exist";
-            if($errors->count()==0){    
-                //$mapper->save($obj);
-                (new PersonsApiMapper($this->options))->save($obj);
-            }
-            $this->view->renderJSON($errors);
-		
-		echo "dsada";
-		*/
-		/*
-		//$authorization = $this->container->get('authorization');
-		//$authorization->createAccess('test', 'test');
-		$this->checkAuthorization();
-		die();
-		//echo "getUser";
-		//$response = $this->container->get('response')->renderView('site/index');
-		//$response = $this->container->get('response')->renderView('site/index');
-
-		
-		$authorization->createAccess('test', 'test');
-		$authorization->deleteAccess();
-		
-		$res = $authorization->isGranted();
-		var_dump($res); 
-		die();
-		return $response;
-		*/
+		return $response->response('', 404);
 	}
 
 	public function editUser($id)
 	{
-		echo "editUser";
+		print_r($id);
+		$this->checkAuthorization();
+		$request = $this->container->get('request');
+		$connection = $this->container->get('connection');
+		$response = $this->container->get('response');
+
+		$user = new User($request->getPost());
+		$mapper = new UserMapper($connection);
+		$user->id = $id;
+		//$mapper->getDirtyProperties()
+		
+		$errors = $user->valid();
+
+		if(count($errors) === 0){
+			print_r($user);
+			die();
+			$mapper = new UserMapper($connection);
+
+			if ($mapper->findByEmail($user->email)) $errors['email'] = User::EXIST;
+			if ($mapper->findByPhone($user->phone)) $errors['phone'] = User::EXIST;
+
+			if(count($errors) === 0){
+				$mapper->save($user);
+
+				return $response->response($user, 200);
+			}
+		}
+
+		return $response->response($errors, 400);
 	}
 
 	public function createUser()
 	{
-		//echo "createUser";
 		$this->checkAuthorization();
+
 		$request = $this->container->get('request');
+		$connection = $this->container->get('connection');
+		$response = $this->container->get('response');
 
 		$user = new User($request->getPost());
 		$errors = $user->valid();
-		print_r($errors);
-		die("dsada");
 
-/*
-		$obj = new User($this->getPost());
-		
-		 $obj = new Persons ($this->getPost());
-			$errors = $obj->valid();
-            $mapper = new PersonsMapper();
+		unset($user->id);
 
-            if ($mapper->findByEmail($obj->email)) $errors->email="exist";
-            if ($mapper->findByLogin($obj->login)) $errors->login="exist";
-            if($errors->count()==0){    
-                //$mapper->save($obj);
-                (new PersonsApiMapper($this->options))->save($obj);
-            }
-            $this->view->renderJSON($errors);
-		
-		echo "dsada";*/
+		if(count($errors) === 0){
+			$mapper = new UserMapper($connection);
+
+			if ($mapper->findByEmail($user->email)) $errors['email'] = User::EXIST;
+			if ($mapper->findByPhone($user->phone)) $errors['phone'] = User::EXIST;
+
+			if(count($errors) === 0){
+				$mapper->save($user);
+
+				return $response->response($user, 200);
+			}
+		}
+
+		return $response->response($errors, 400);
 	}
 
-	public function deleteUser()
+	public function deleteUser($id)
 	{
-		echo "deleteUser";
+		$this->checkAuthorization();
+		$connection = $this->container->get('connection');
+		$response = $this->container->get('response');
+
+		$mapper = new UserMapper($connection);
+		$mapper->deleteObject($id);
+
+		return $response->response('', 200);
 	}
 
 	private function checkAuthorization()
