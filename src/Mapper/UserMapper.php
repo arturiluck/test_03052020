@@ -71,8 +71,30 @@ class UserMapper extends Mapper{
 		return $statement->fetchAll();
 	}
 
+	
+	public function getDirtyProperties($obj)
+	{
 
-	public function save($obj)
+		$existUser = $this->findById($obj->id);
+
+		if(!($existUser instanceof User)){
+
+			throw new ApiException('',404);
+		}
+
+		$properties = [];
+		
+		foreach ($existUser as $key => $value){
+			if (isset($obj->$key) && ($obj->$key != $value)){
+				$properties[$key] = $obj->$key;
+			}
+		}
+
+		return $properties;
+	}
+
+
+	public function save($obj, $properties = null)
 	{
 		try{
 			if ($obj->id) {

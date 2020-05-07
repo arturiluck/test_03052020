@@ -43,26 +43,32 @@ class UserController extends \Framework\Controller
 
 	public function editUser($id)
 	{
-		print_r($id);
 		$this->checkAuthorization();
 		$request = $this->container->get('request');
 		$connection = $this->container->get('connection');
 		$response = $this->container->get('response');
 
 		$user = new User($request->getPost());
-		$mapper = new UserMapper($connection);
 		$user->id = $id;
-		//$mapper->getDirtyProperties()
-		
+
+		$mapper = new UserMapper($connection);
+		$dirtyProperties = $mapper->getDirtyProperties($user);
+
 		$errors = $user->valid();
 
 		if(count($errors) === 0){
-			print_r($user);
-			die();
 			$mapper = new UserMapper($connection);
 
-			if ($mapper->findByEmail($user->email)) $errors['email'] = User::EXIST;
-			if ($mapper->findByPhone($user->phone)) $errors['phone'] = User::EXIST;
+			/*
+			$emailUser = $mapper->findByEmail($user->email);
+			if ($emailUser && $emailUser->id !== $user->id){
+				
+				$errors['email'] = User::EXIST;
+			}
+			*/
+
+			if ($mapper->findByEmail($dirtyProperties['email'])) $errors['email'] = User::EXIST;
+			if ($mapper->findByPhone($dirtyProperties['phone'])) $errors['phone'] = User::EXIST;
 
 			if(count($errors) === 0){
 				$mapper->save($user);

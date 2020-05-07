@@ -2,6 +2,8 @@
 
 namespace Framework;
 
+use \Framework\Exception\ApiException;
+
 class Request implements Interfaces\Request
 {
 	private $bodyRequest = [];
@@ -16,6 +18,10 @@ class Request implements Interfaces\Request
 	{
 		$jsonRequest = file_get_contents("php://input");
 		$this->bodyRequest = json_decode($jsonRequest);
+
+		if (!is_object($this->bodyRequest)) {
+			throw new ApiException('', 400);
+		}
 
 		$this->request = $request;
 	}
