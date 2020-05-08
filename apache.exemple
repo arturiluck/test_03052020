@@ -1,0 +1,15 @@
+#For example , start site on localhost:8030
+Listen 8030
+<VirtualHost *:8030>
+	ServerAdmin webmaster@localhost
+	DocumentRoot /var/www/html/test_med/public
+	ErrorLog ${APACHE_LOG_DIR}/test_med_error.log
+	CustomLog ${APACHE_LOG_DIR}/test_med_access.log combined
+</VirtualHost>
+
+
+<Directory {your dir to site}/test_med>
+	Options Indexes FollowSymLinks
+	AllowOverride All
+	Require all granted
+</Directory>
