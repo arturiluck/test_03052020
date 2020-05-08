@@ -26,7 +26,7 @@ class Authorization implements Interfaces\Authorization
 
 		if ($passwordFromDb === sha1($password)) {
 			$this->login = $login;
-			$_SESSION['granted'] = ['login' => $login ];
+			$_SESSION['granted'] = ['login' => $login];
 
 			return $_SESSION['granted'];
 		}

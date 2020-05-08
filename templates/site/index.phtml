@@ -1,140 +1,130 @@
-  <div class="col-sm-12 content" ng-app="myApp" ng-controller="formCtrl">
-	<div class="col-sm-12" style="background-color: #f1f1f1;">
-		<h4 style="text-align:center;">AlterEgo TEST SITE 1</h4>
+<div class="col-sm-12 content" ng-app="myApp" ng-controller="formCtrl">
+	<div class="col-sm-12 margin-md" style="background-color: #f1f1f1;">
+		<h2 style="text-align:center;">Med Test</h4>
+		<h4 style="text-align:center;">Welcome: {{admin.login}}</h4>
+
+		<div class="col-sm-10" style="background-color: #f1f1f1;">
+		</div>
+		<div class="col-sm-2 mr-xs-5" style=" margin-bottom:15px;">
+					<button class="btn btn-primary btn-s btn-block btn-success" ng-click="checkLoginAction()" ng-disabled="false" >Login</button>
+					<button class="btn btn-primary btn-s btn-block btn-danger" ng-click="logoutAction()" ng-disabled="false" >Logout</button>
+		</div>
 	</div>
-    <div class="col-sm-3 sidenav" style="overflow-y: auto;">
-      <!---->
-	  <div class="col-sm-12" ng-repeat="x in showAll">
-		  <div class="panel panel-primary">
-			<div class="panel-heading"><button class="btn btn-primary btn-danger" data-toggle="modal" data-target="#editPerson" ng-click="beforeEditPerson(x)" ng-disabled="false" >Edit</button></div>
-			<div class="panel-body">
-				<table class="table table-striped">
-					  <tr>
-						<td>Login</td>
-						<td>{{x.login}}</td>
-					  </tr>
-					   <tr>
-						<td>Lastname</td>
-						<td>{{x.lastname}}</td>
-					  </tr>
-					   <tr>
-						<td>Name</td>
-						<td>{{x.name}}</td>
-					  </tr>
-					   <tr>
-						<td>Email</td>
-						<td>{{x.email}}</td>
-					  </tr>
-					   <tr>
-						<td>Password</td>
-						<td>{{x.password}}</td>
-					  </tr>
-				</table>
+	<div class="col-sm-3 sidenav" style="overflow-y: auto;">
+	<!---->
+		<div class="col-sm-12" ng-repeat="user in allUsers">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<button class="btn btn-primary btn-success" data-toggle="modal" data-target="#editUser" ng-click="beforeEditUserAction(user)" ng-disabled="false" >Edit</button>
+					<button class="btn btn-primary btn-danger" ng-click="deleteUserAction(user)" ng-disabled="false" >Delete</button>
+				</div>
+				<div class="panel-body">
+					<table class="table table-striped">
+						<tr>
+							<td>Id</td>
+							<td>{{user.id}}</td>
+						</tr>
+						<tr>
+							<td>Firstname</td>
+							<td>{{user.firstname}}</td>
+						</tr>
+						<tr>
+							<td>Lastname</td>
+							<td>{{user.lastname}}</td>
+						</tr>
+						<tr>
+							<td>Phone</td>
+							<td>{{user.phone}}</td>
+						</tr>
+						<tr>
+							<td>Email</td>
+							<td>{{user.email}}</td>
+						</tr>
+					</table>
+				</div>
 			</div>
-		  </div>
-	  </div>
-      <!---->
-    </div>
-    <div class="col-sm-9">
-  		<div class="col-sm-12 content">
-  			<div class="">
+		</div>
+	<!---->
+	</div>
+	<div class="col-sm-9">
+		<div class="col-sm-12 content">
+			<div class="">
 				<h2>Create user form</h2>
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<form>
-							<div class="form-group {{erorr.login.erorrClass}}">
-								<label for="email">Login:</label>
-								<input type="text" class="form-control" id="login" placeholder="Enter login" name="login"  ng-model="user.login">
-								<span ng-show="erorr.login.erorrShow" >{{erorr.login.erorrText}}</span>
+							<div class="form-group {{erorr.firstname.erorrClass}}">
+								<label for="firstname">Firstname:</label>
+								<input type="text" class="form-control" id="firstname" placeholder="Enter firstname" name="Firstname"  ng-model="createUser.firstname">
+								<span ng-show="erorr.firstname.erorrShow" >{{erorr.firstname.erorrText}}</span>
 							</div>
 							<div class="form-group {{erorr.lastname.erorrClass}}">
-								<label for="email">lastname:</label>
-								<input type="text" class="form-control" id="lastname" placeholder="Enter last name" name="lastname"  ng-model="user.lastname">
+								<label for="lastname">Lastname:</label>
+								<input type="text" class="form-control" id="lastname" placeholder="Enter lastname" name="lastname"  ng-model="createUser.lastname">
 								<span ng-show="erorr.lastname.erorrShow" >{{erorr.lastname.erorrText}}</span>
 							</div>
-							<div class="form-group {{erorr.name.erorrClass}}">
-								<label for="email">Name:</label>
-								<input type="text" class="form-control" id="name" placeholder="Enter name" name="name"  ng-model="user.name">
-								<span ng-show="erorr.name.erorrShow" >{{erorr.name.erorrText}}</span>
+							<div class="form-group {{erorr.phone.erorrClass}}">
+								<label for="phone">Phone:</label>
+								<input type="text" class="form-control" id="phone" placeholder="Enter phone" name="phone"  ng-model="createUser.phone">
+								<span ng-show="erorr.phone.erorrShow" >{{erorr.phone.erorrText}}</span>
 							</div>
 							<div class="form-group {{erorr.email.erorrClass}}">
 								<label for="email">Email:</label>
-								<input type="email" class="form-control" id="email" placeholder="Enter email" name="email"  ng-model="user.email">
+								<input type="email" class="form-control" id="email" placeholder="Enter email" name="email"  ng-model="createUser.email">
 								<span ng-show="erorr.email.erorrShow" >{{erorr.email.erorrText}}</span>
 							</div>
-							<div class="form-group {{erorr.password.erorrClass}}">
-								<label for="pwd">Password:</label>
-								<input type="password" class="form-control" id="password" placeholder="Enter password" name="password" ng-model="user.password">
-								<span ng-show="erorr.password.erorrShow" >{{erorr.password.erorrText}}</span>
-							</div>
-							<input type="hidden" id="token"  name="token"  value="<?php echo $token; ?>" ng-model="user.token">
-				
-							<!-- <button type="submit" class="btn btn-default"  ng-disabled="showButtonPaused" >Submit</button> -->
-							<button  class="btn btn-primary btn-danger" ng-click="registerPersons()" ng-disabled="showButtonPaused" >Add new user</button> 
-							<!-- <p>{{user}}</p> -->
+
+							<button class="btn btn-primary btn-success" ng-click="createUserAction()" ng-disabled="showButtonPaused" >Add new user</button> 
 						</form>
 
 					</div>
 				</div>
 			</div>
-  		</div>
-    </div>
-	
-	
-	<!--editPerson-->
-	
-	 <!-- Modal -->
-	<div class="modal fade" id="editPerson" role="dialog">
+		</div>
+	</div>
+
+	<!--editUser-->
+
+	<!-- Modal -->
+	<div class="modal fade" id="editUser" role="dialog">
 		<div class="modal-dialog">
-		
-		  <!-- Modal content-->
-		  <div class="modal-content">
-			<div class="modal-header">
-			  <button type="button" class="close" data-dismiss="modal">&times;</button>
-			  <h4 class="modal-title">Edit exist user</h4>
-			</div>
-			<div class="modal-body">
-			  <div class="panel panel-default">
-					<div class="panel-body">
-						<form>				
-							<div class="form-group {{erorrEdit.login.erorrClass}}">
-								<label for="email">Login:</label>
-								<input type="text" class="form-control" id="edit_login" placeholder="Enter login" name="login"  ng-model="editUser.login">
-								<span ng-show="erorrEdit.login.erorrShow" >{{erorrEdit.login.erorrText}}</span>
-							</div>						
-							<div class="form-group {{erorrEdit.lastname.erorrClass}}">
-								<label for="email">lastname:</label>
-								<input type="text" class="form-control" id="edit_lastname" placeholder="Enter last name" name="lastname"  ng-model="editUser.lastname">
-								<span ng-show="erorrEdit.lastname.erorrShow" >{{erorrEdit.lastname.erorrText}}</span>
-							</div>
-							<div class="form-group  {{erorrEdit.name.erorrClass}}">
-								<label for="email">Name:</label>
-								<input type="text" class="form-control" id="edit_name" placeholder="Enter name" name="name"  ng-model="editUser.name">
-								<span ng-show="erorrEdit.name.erorrShow" >{{erorrEdit.name.erorrText}}</span>
-							</div>
-							<div class="form-group {{erorrEdit.email.erorrClass}}">
-								<label for="email">Email:</label>
-								<input type="email" class="form-control" id="edit_email" placeholder="Enter email" name="email"  ng-model="editUser.email">
-								<span ng-show="erorrEdit.email.erorrShow" >{{erorrEdit.email.erorrText}}</span>
-							</div>							
-							<div class="form-group {{erorrEdit.password.erorrClass}}">
-								<label for="pwd">Password:</label>
-								<input type="password" class="form-control" id="edit_password" placeholder="Enter password" name="password" ng-model="editUser.password">
-								<span ng-show="erorrEdit.password.erorrShow" >{{erorrEdit.password.erorrText}}</span>
-							</div>
-							<input type="hidden" id="edit_token"  name="token"  value="<?php echo $token; ?>" ng-model="editUser.token">
-							<input type="hidden" id="edit_id"  name="id" ng-model="editUser.id">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Edit exist user</h4>
+				</div>
+				<div class="modal-body">
+				  <div class="panel panel-default">
+						<div class="panel-body">
+							<form>
+								<div class="form-group {{erorrEdit.firstname.erorrClass}}">
+									<label for="firstname">Firstname:</label>
+									<input type="text" class="form-control" id="edit_firstname" placeholder="Enter firstname" name="Firstname"  ng-model="editUser.firstname">
+									<span ng-show="erorrEdit.firstname.erorrShow" >{{erorrEdit.firstname.erorrText}}</span>
+								</div>
+								<div class="form-group {{erorrEdit.lastname.erorrClass}}">
+									<label for="lastname">Lastname:</label>
+									<input type="text" class="form-control" id="edit_lastname" placeholder="Enter lastname" name="lastname"  ng-model="editUser.lastname">
+									<span ng-show="erorrEdit.lastname.erorrShow" >{{erorrEdit.lastname.erorrText}}</span>
+								</div>
+								<div class="form-group {{erorrEdit.phone.erorrClass}}">
+									<label for="phone">Phone:</label>
+									<input type="text" class="form-control" id="edit_phone" placeholder="Enter phone" name="phone"  ng-model="editUser.phone">
+									<span ng-show="erorrEdit.phone.erorrShow" >{{erorrEdit.phone.erorrText}}</span>
+								</div>
+								<div class="form-group {{erorrEdit.email.erorrClass}}">
+									<label for="email">Email:</label>
+									<input type="email" class="form-control" id="edit_email" placeholder="Enter email" name="email"  ng-model="editUser.email">
+									<span ng-show="erorrEdit.email.erorrShow" >{{erorrEdit.email.erorrText}}</span>
+								</div>
 
-							<!-- <button type="submit" class="btn btn-default"  ng-disabled="showButtonPaused" >Submit</button> -->
-							<button  class="btn btn-primary btn-danger" ng-click="editPerson()" ng-disabled="showButtonPaused" >edit this user</button> 
-						</form>
-
+								<button  class="btn btn-primary btn-success" ng-click="editUserAction()" ng-disabled="showButtonPaused" >edit this user</button> 
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
-	
-		  </div>
-		  
 		</div>
 	</div>
 	<!---->
@@ -142,89 +132,235 @@
 	<!--Login-->
 	
 	 <!-- Modal -->
-	<div class="modal fade" id="login" role="dialog">
+	<div class="modal fade" id="loginForm" role="dialog">
 		<div class="modal-dialog">
 		
-		  <!-- Modal content-->
-		  <div class="modal-content">
+		<!-- Modal content-->
+		<div class="modal-content">
 			<div class="modal-header">
-			  <button type="button" class="close" data-dismiss="modal">&times;</button>
-			  <h4 class="modal-title">login admin</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">login</h4>
 			</div>
 			<div class="modal-body">
 			  <div class="panel panel-default">
 					<div class="panel-body">
 						<form>
-							<div class="form-group {{erorrEdit.login.erorrClass}}">
+							<div class="form-group">
 								<label for="email">Login:</label>
-								<input type="text" class="form-control" id="edit_login" placeholder="Enter login" name="login"  ng-model="editUser.login">
-								<span ng-show="erorrEdit.login.erorrShow" >{{erorrEdit.login.erorrText}}</span>
-							</div>						
-							<div class="form-group {{erorrEdit.password.erorrClass}}">
+								<input type="text" class="form-control" id="admin_login" placeholder="Enter login" name="login"  ng-model="admin.login">
+							</div>
+							<div class="form-group">
 								<label for="pwd">Password:</label>
-								<input type="password" class="form-control" id="edit_password" placeholder="Enter password" name="password" ng-model="editUser.password">
-								<span ng-show="erorrEdit.password.erorrShow" >{{erorrEdit.password.erorrText}}</span>
+								<input type="password" class="form-control" id="admin_password" placeholder="Enter password" name="password" ng-model="admin.password">
 							</div>
 
-							<button  class="btn btn-primary btn-default" ng-click="login()" ng-disabled="showButtonPaused" >Login</button> 
+							<button  class="btn btn-primary btn-success" ng-click="loginAction()" ng-disabled="showButtonPaused" >Login</button> 
 						</form>
 
 					</div>
 				</div>
 			</div>
-	
-		  </div>
-		  
+
+		</div>
 		</div>
 	</div>
 	<!---->
-  </div>
+</div>
 
 
 
 <script>
-var app = angular.module('myApp', []);
+let app = angular.module('myApp', []);
 app.controller('formCtrl', function($scope, $http, $interval) {
 	$scope.erorr={};
 	$scope.erorrEdit={};
-	$scope.showAll=[{'name':'name'}];
-	$scope.user={};
+	$scope.allUsers=[];
+	$scope.createUser={};
 	$scope.editUser={};
-	//$scope.user.token=$scope.editUser.token='<?php echo $token; ?>';
+	$scope.admin={};
 
-
-	$scope.login = function() {
-		alert();
+	$scope.checkLoginAction = function() {
+		$http({
+			method : "GET",
+			url : "/auth/check",
+			headers: {"Content-Type": "application/json"},
+		}).then(
+			function mySucces(response){
+				$scope.admin = response.data;
+				$("#loginForm").modal("hide");
+			},
+			function myError(response){
+				if (response.status == 401){
+					$("#loginForm").modal("show");
+				} else {
+					alert("Something wrong with server.");
+				}
+			}
+		);
 	};
 
-	$scope.registerPersons = function() {
-		console.log($scope.user);
-	    $http({
-	       method : "PUT",
-	       url : "/api/user/create",
-		   headers: {'Content-Type': 'application/json'},
-		   data: $scope.user
-	     }).then(function mySucces(response) {
-			 console.log(response);
-			 alert();
-			 $scope.erorr={};
-			 if (Object.keys(response.data.data).length>0){
-				 for (var key in response.data.data){
-					 $scope.checkErorrs($scope.erorr,key,response.data.data[key]);
-				 }
-			 }else{
-				alert('New user is added');
-			 }		 
-			 
-	       }, function myError(response) {
-			   alert('dsadada!!!!_______SEQWE');
-			 console.log(response);
-	     });
-	}
-	$scope.checkErorrs= function(obj,key,value){
+	$scope.loginAction = function() {
+		$http({
+			method : "POST",
+			url : "/auth/login",
+			headers: {"Content-Type": "application/json"},
+			data: $scope.admin
+		}).then(
+			function mySucces(response){
+				$scope.admin = response.data;
+				$("#loginForm").modal("hide");
+			},
+			function myError(response){
+				if (response.status == 401){
+					alert("Wrong: login - password.");
+				} else {
+					alert("Something wrong with server.");
+				}
+			}
+		);
+	};
+
+	$scope.logoutAction = function() {
+		$http({
+			method : "POST",
+			url : "/auth/logout",
+			headers: {"Content-Type": "application/json"}
+		}).then(
+			function mySucces(response){
+				$("#loginForm").modal("show");
+			},
+			function myError(response){
+				if (response.status == 401){
+					$("#loginForm").modal("show");
+				} else {
+					alert("Something wrong with server.");
+				}
+			}
+		);
+	};
+
+	$scope.createUserAction = function() {
+		$http({
+			method : "POST",
+			url : "/api/user/create",
+			headers: {'Content-Type': 'application/json'},
+			data: $scope.createUser
+		}).then(
+			function mySucces(response){
+				$scope.createUser = {};
+				$scope.erorr={};
+				$scope.allUsers.unshift(response.data)
+				alert('You have added new user.');
+			},
+			function myError(response){
+				if (response.status == 401){
+					$("#loginForm").modal("show");
+				} else if(response.status == 400) {
+					$scope.erorr={};
+
+					if (Object.keys(response.data).length > 0){
+						for (var key in response.data){
+							$scope.checkErorrs($scope.erorr, key, response.data[key]);
+						}
+					} else {
+						alert("Something wrong. Code: " + response.status);
+					}
+				} else {
+					alert("Something wrong. Code: " + response.status);
+				}
+			}
+		);
+	};
+
+	$scope.beforeEditUserAction = function(user){
+		$scope.editUser = user;
+		$scope.erorrEdit = {};
+		console.log($scope.editUser);
+	};
+
+	$scope.editUserAction = function(){
+		let editUrl = "/api/user/edit/" + $scope.editUser.id;
+
+		$http({
+			method : "PATCH",
+			url : editUrl,
+			headers: {'Content-Type': 'application/json'},
+			data: $scope.editUser
+		}).then(
+			function mySucces(response){
+				$scope.editUser = {};
+				$scope.erorrEdit={};
+				alert('You have edited user.');
+				$("#editUser").modal("hide");
+			},
+			function myError(response){
+				if (response.status == 401){
+					$("#loginForm").modal("show");
+				} else if(response.status == 400) {
+					$scope.erorrEdit={};
+
+					if (Object.keys(response.data).length > 0){
+						for (var key in response.data){
+							$scope.checkErorrs($scope.erorrEdit, key, response.data[key]);
+						}
+					} else {
+						alert("Something wrong. Code: " + response.status);
+					}
+				} else {
+					alert("Something wrong. Code: " + response.status);
+				}
+			}
+		);
+	};
+
+	$scope.deleteUserAction = function(user){
+		let deleteUrl = "/api/user/delete/" + user.id;
+
+		$http({
+			method : "DELETE",
+			url : deleteUrl,
+			headers: {'Content-Type': 'application/json'}
+		}).then(
+			function mySucces(response){
+				$scope.getAllUsersAction();
+				alert('You have edited user.');
+			},
+			function myError(response){
+				if (response.status == 401){
+					$("#loginForm").modal("show");
+				} else {
+					alert("Something wrong. Code: " + response.status);
+				}
+			}
+		);
+	};
+
+	$scope.getAllUsersAction = function() {
+		$http({
+			method : "GET",
+			url : "api/users/get",
+			headers: {'Content-Type': 'application/json'},
+		}).then(
+			function mySucces(response){
+				$scope.allUsers = response.data;
+			},
+			function myError(response){
+				if (response.status == 401){
+					$("#loginForm").modal("show");
+				} else if(response.status == 404){
+					$scope.allUsers=[];
+				} else {
+					alert("Something wrong. Code: " + response.status);
+				}
+			}
+		);
+	};
+
+	$scope.checkErorrs = function(obj, key, value){
 		obj[key]={};
 		obj[key].erorrClass="has-error";
 		obj[key].erorrShow="true";
+
 		if (value=="empty"){
 			obj[key].erorrText="Can not be empty.";
 		}else if(value=="notvalid"){
@@ -233,49 +369,12 @@ app.controller('formCtrl', function($scope, $http, $interval) {
 			obj[key].erorrClass="has-warning";
 			obj[key].erorrText="Already exist.";
 		}
-		
-		
-	}
-	$scope.beforeEditPerson=function(x){
-		$scope.editUser=x;
-		$scope.erorrEdit={};
-		console.log($scope.editUser);
-	}
-	$scope.editPerson=function(){
-		 $http({
-	       method : "POST",
-	       url : "/site/edit",
-		   headers: {'Content-Type': 'application/json'},
-		   data: $scope.editUser//$.param($scope.editUser)
-	     }).then(function mySucces(response) {	 
-			 console.log(response.data);
-			 $scope.erorr={};
-			 if (Object.keys(response.data.data).length>0){
-				 for (var key in response.data.data){
-					 $scope.checkErorrs($scope.erorrEdit,key,response.data.data[key]);
-				 }
-			 }else{
-				alert('User has been edited');
-			 }		 
-	       }, function myError(response) {
-			 console.log(response.data);
-	     });
-	}/*
-	$scope.callTimeUpdate=function(){
-		 $http({
-	       method : "POST",
-	       url : "/site/showall",
-		   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-		   data: $.param({})
-	     }).then(function mySucces(response) {
-	         $scope.showAll=response.data;
-			 //console.log(response.data);
-	       }, function myError(response) {
-			 //console.log(response.data);
-	     });
-	}
-	$scope.callTimeUpdate();
-	$interval( function(){ $scope.callTimeUpdate(); }, 3000);
-*/
+	};
+
+	$scope.checkLoginAction();
+	$scope.getAllUsersAction();
+	/*
+		$interval( function(){ $scope.getAllUsersAction(); }, 3000);
+	*/
 });
 </script>
